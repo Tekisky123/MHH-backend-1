@@ -104,8 +104,8 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        let{firstName,lastName,email,password,mobile,userType}=req.body
-        const data = await UserModel.findOneAndUpdate({mobile},{firstName,lastName,email,password,mobile,userType})
+        let{firstName,lastName,email,mobile,userType}=req.body
+        const data = await UserModel.findOneAndUpdate({mobile},{firstName,lastName,email,mobile,userType})
 
      
         return res.status(201).json({
