@@ -2,7 +2,7 @@ import express  from "express";
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from "./db/connectDB.js";
-import patientRouter from './routes/patientRoute.js'
+import patientRouter from './routers/patientRoute.js'
 import morgan from "morgan";
 
 //connection of mongodb
