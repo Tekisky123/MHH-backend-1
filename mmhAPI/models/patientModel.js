@@ -48,7 +48,8 @@ const diseaseDetailSchema = new mongoose.Schema({
 });
 
 // Define the Main schema
-const patientSchema = new mongoose.Schema({
+// combines the previously defined schemas to create a main schema for a patient
+const patientSchema = new mongoose.Schema({      
  
   patientDetails: { type: patientDetailsSchema, required: true },
   familyDetail: { type: [familyDetailSchema], required: true },
