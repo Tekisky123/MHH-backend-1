@@ -2,50 +2,51 @@ import mongoose from 'mongoose';
 
 // Define the Patient Details schema
 const patientDetailsSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  aadhar: { type: String, required: true },
-  mobile: { type: String, required: true },
-  sex: { type: String, required: true },
-  age: { type: Number, required: true },
-  address: { type: String, required: true },
-  pin: { type: String, required: true },
-  talukha: { type: String, required: true },
-  district: { type: String, required: true },
-  state: { type: String, required: true },
-  maritalstatus: { type: String, required: true },
+  name: { type: String,  trim: true , required: true },
+  aadhar: { type: String,  trim: true ,required: true },
+  mobile: { type: String, trim: true , required: true },
+  sex: { type: String,  trim: true ,required: true },
+  age: { type: Number,  trim: true ,required: true },
+  address: { type: String,  trim: true ,required: true },
+  pin: { type: String, trim: true , required: true },
+  talukha: { type: String,  trim: true ,required: true },
+  district: { type: String, trim: true , required: true },
+  state: { type: String,  trim: true ,required: true },
+  maritalstatus: { type: String,  trim: true ,required: true },
+  rationcardnumber : {type: String , trim: true }
 });
 
 
 // Define the Family Detail schema
 const familyDetailSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  relation: { type: String, required: true },
-  age: { type: Number, required: true },
-  occupation: { type: String, required: true },
-  monthlyIncome: { type: Number, required: true },
+  name: { type: String, trim: true, required: true },
+  relation: { type: String, trim: true, required: true },
+  age: { type: Number, trim: true, required: true },
+  occupation: { type: String, trim: true, required: true },
+  monthlyIncome: { type: Number, trim: true, required: true },
 });
 
 // Define the CareTaker schema
 const careTakerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  mobile1: { type: String, required: true },
-  mobile2: { type: String, required: true },
-  particulars: { type: String, required: true },
+  name: { type: String, trim: true, required: true },
+  mobile1: { type: String, trim: true, required: true },
+  mobile2: { type: String, trim: true },
+  particulars: { type: String, trim: true, required: true },
 });
 
 // Define the Disease Detail schema
 const diseaseDetailSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  diagnoseDate: { type: Date, required: true },
-  diagnoseBy: { type: String, required: true },
-  investigationDone1: { type: String, required: true },
-  investigationDone2: { type: String, required: true },
-  investigationDone3: { type: String, required: true },
-  currentHospitalName: { type: String, required: true },
-  currentHospitalAddress: { type: String, required: true },
-  currentHospitalContactNo: { type: String, required: true },
-  currentTreatmentDetail: { type: String, required: true },
-  doctorAdviceForFurtherProcess: { type: String, required: true },
+  name: { type: String,trim: true , required: true },
+  diagnoseDate: { type: Date,trim: true , required: true },
+  diagnoseBy: { type: String,trim: true  },
+  investigationDone1: { type: String,trim: true , required: true },
+  investigationDone2: { type: String, trim: true ,required: true },
+  investigationDone3: { type: String, trim: true ,required: true },
+  currentHospitalName: { type: String,trim: true , required: true },
+  currentHospitalAddress: { type: String, trim: true ,required: true },
+  currentHospitalContactNo: { type: String, trim: true ,required: true },
+  currentTreatmentDetail: { type: String, trim: true ,required: true },
+  doctorAdviceForFurtherProcess: { type: String,trim: true , required: true },
 });
 
 
@@ -53,11 +54,12 @@ const diseaseDetailSchema = new mongoose.Schema({
 // Define the Main schema
 const patientSchema = new mongoose.Schema({
 
-  patientDetails: { type: patientDetailsSchema, required: true },
-  patientID : {type : String, required: true},
+  patientDetails: { type: patientDetailsSchema, trim: true,required: true },
+  patientID : {type : String, trim: true,required: true},
+  amount : {type : String, trim: true},
   familyDetail: { type: [familyDetailSchema], required: true },
   careTaker: { type: careTakerSchema, required: true },
-  disease: { type: String, required: true },
+  disease: { type: String, trim: true,required: true },
   // Assuming disease is a string, you can adjust the type as needed
   diseaseDetail: { type: diseaseDetailSchema, required: true },
 
@@ -65,18 +67,21 @@ const patientSchema = new mongoose.Schema({
   documents:{type:Array},
   
   
-  createdBy: { type: String , required: true},
+  createdBy: { type: String , trim: true,required: true},
   registeredDate: { type: Date, default: Date.now },
-  status: { type: String , required: true},
-  referredBy : { type: String , required: true},
+  status: { type: String ,trim: true, required: true},
+  referredBy : { type: String ,trim: true, required: true},
+  comments : {type : String, trim: true},
+  patientfeedback : {type : String, trim: true},
+  closedate : {type : String},
 
   // at update
-  schemeName: { type: String },     
-  hospital: { type: String },       
-  viewByMhh: { type: String },      
+  schemeName: { type: String , trim: true},     
+  hospital: { type: String , trim: true},       
+  viewByMhh: { type: String , trim: true},      
   adviceByMhh: { type: String },    
-  proposeHelpByMhh: { type: String },
-});
+  proposeHelpByMhh: { type: String , trim: true},
+}, {timestamps : true});
 
 
 
