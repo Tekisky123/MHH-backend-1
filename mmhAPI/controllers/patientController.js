@@ -162,7 +162,7 @@ export const updatePatient = async (req, res) => {
 
 export const deletePatient = async (req, res) => {
     const _id = req.params.id
-    const patient = await PatientModel.findById(_id)
+    const patient = await PatientModel.findByIdAndDelete(_id)
 
     if (!patient) {
         return res.status(status.NOT_FOUND).json({
