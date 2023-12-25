@@ -208,39 +208,48 @@ export const findPendingCasesMoreThan5DaysService = async () => {
 
 
 
-export const operatorDetailsBasedOnStatusService = async (phoneNumber) =>{
+export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
   try {
 
     //Pending cases
     const pendingPatients = await PatientModel.find({
-      createdBy : phoneNumber,
-      status : 'Patient Registered'
+      createdBy: phoneNumber,
+      status: 'Patient Registered'
     })
     const pendingPatientsCount = pendingPatients.length
 
 
     //Documents
     const uploadDocuments = await PatientModel.find({
-      createdBy : phoneNumber,
-      status : 'Documents Uploaded'
+      createdBy: phoneNumber,
+      status: 'Documents Uploaded'
     })
     const uploadDocumentsCount = uploadDocuments.length
 
 
     const hospitalAndScheme = await PatientModel.find({
-      createdBy : phoneNumber,
-      status : 'Scheme & Hospital Selected'
+      createdBy: phoneNumber,
+      status: 'Scheme & Hospital Selected'
     })
     const hospitalAndSchemeCount = hospitalAndScheme.length
 
-    const allDataResponse = [...pendingPatients, ...uploadDocuments, ...hospitalAndScheme]
-    console.log("alll data===>" , allDataResponse);
+    
+    const closePatientDetails = await PatientModel.find({
+      createdBy: phoneNumber,
+      status: 'Closed-Patient Rejected'
+    })
+    const closePatientDetailsCount = closePatientDetails.length
+    
 
-     const response = {
-      pendingPatientsCount : pendingPatientsCount,
-      uploadDocumentsCount : uploadDocumentsCount,
-      hospitalAndSchemeCount : hospitalAndSchemeCount,
-      allDataResponse : allDataResponse
+    const allDataResponse = [...pendingPatients, ...uploadDocuments, ...hospitalAndScheme , ...closePatientDetails]
+    // console.log("alll data===>", allDataResponse);
+
+    const response = {
+      pendingPatientsCount: pendingPatientsCount,
+      uploadDocumentsCount: uploadDocumentsCount,
+      hospitalAndSchemeCount: hospitalAndSchemeCount,
+      closePatientDetailsCount: closePatientDetailsCount,
+      allDataResponse: allDataResponse
     }
     return response;
 
@@ -249,4 +258,3 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) =>{
     throw error;
   }
 }
-
