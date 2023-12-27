@@ -28,6 +28,37 @@ export const getTotalAmountService = async () => {
 };
 
 
+export const getTotalAmountGivenByMMHService = async () => {
+  try {
+    const result = await PatientModel.aggregate([
+      {
+        $match: {
+          amountGivenByMMH: { $exists: true }, // Match documents where amountGivenByMMH field exists
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmountGivenByMMH: { $sum: { $toDouble: "$amountGivenByMMH" } },
+        },
+      },
+    ]);
+
+    if (result.length > 0) {
+      const totalAmountGivenByMMH = result[0].totalAmountGivenByMMH;
+      console.log('Total Amount Given by MMH:', totalAmountGivenByMMH);
+      return totalAmountGivenByMMH;
+    } else {
+      console.log('No records found with amountGivenByMMH field.');
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error fetching total amount given by MMH:', error);
+    throw error;
+  }
+};
+
+
 
 export const getThisMonthTotalAmountService = async () => {
   try {
