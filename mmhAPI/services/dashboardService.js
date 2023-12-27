@@ -70,7 +70,7 @@ export const getThisMonthTotalAmountService = async () => {
 export const totalNumberOfCaseCloseService = async () => {
   try {
     const closedStatusValues = [
-      'Patient Rejected',
+      'Closed-Patient Rejected',
       'Closed-Civil',
       'Closed-Ayushman Bharat',
       'Closed-Private',
@@ -114,7 +114,7 @@ export const totalNumberOfCaseCloseInMonthService = async () => {
     const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based in JavaScript
 
     const closedStatusValues = [
-      'Patient Rejected',
+      'Closed-Patient Rejected',
       'Closed-Civil',
       'Closed-Ayushman Bharat',
       'Closed-Private',
@@ -236,7 +236,12 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
     
     const closePatientDetails = await PatientModel.find({
       createdBy: phoneNumber,
-      status: 'Closed-Patient Rejected'
+      status: ['Closed-Patient Rejected',
+        'Closed-Civil Hospital',
+        'Closed-Ayushman Bharat',
+        'Closed-Private Hospital',
+        'Closed-MJPJA',
+        'Closed-Other']
     })
     const closePatientDetailsCount = closePatientDetails.length
     
