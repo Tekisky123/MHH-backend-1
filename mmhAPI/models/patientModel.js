@@ -58,6 +58,7 @@ const patientSchema = new mongoose.Schema({
   patientDetails: { type: patientDetailsSchema, trim: true,required: true },
   patientID : {type : String, trim: true,required: true},
   amountSaved : {type : String, trim: true},
+  amountGivenByMMH : {type : String, trim: true},
   familyDetail: { type: [familyDetailSchema], required: true },
   careTaker: { type: careTakerSchema, required: true },
   disease: { type: String, trim: true,required: true },
