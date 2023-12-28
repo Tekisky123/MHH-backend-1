@@ -102,7 +102,7 @@ export const totalNumberOfCaseCloseService = async () => {
   try {
     const closedStatusValues = [
       'Closed-Patient Rejected',
-      'Closed-Civil',
+      'Closed-Civil Hospital',
       'Closed-Ayushman Bharat',
       'Closed-Private',
       'Closed-MJPJA',
@@ -146,7 +146,7 @@ export const totalNumberOfCaseCloseInMonthService = async () => {
 
     const closedStatusValues = [
       'Closed-Patient Rejected',
-      'Closed-Civil',
+      'Closed-Civil Hospital',
       'Closed-Ayushman Bharat',
       'Closed-Private',
       'Closed-MJPJA',
