@@ -43,6 +43,7 @@ export const dashboardController = async (req, res) => {
         const getTotalAmountGivenByMMH = await getTotalAmountGivenByMMHService();
         // console.log("getTotalAmountGivenByMMH===>" , getTotalAmountGivenByMM);
 
+
         res.status(200).json({
             success: true,
             totalAmountSaved: totalAmountSaved,
@@ -64,8 +65,6 @@ export const dashboardController = async (req, res) => {
             error: error.message
         })
     }
-    // res.status()
-
 }
 
 
@@ -74,7 +73,7 @@ export const dashboardOperatorDetailsController = async (req, res) => {
 
     try {
          const {phoneNumber} = req.query
-         console.log( "number ==> cont " ,phoneNumber);
+        //  console.log( "number ==> cont " ,phoneNumber);
          const details = await operatorDetailsBasedOnStatusService(phoneNumber)
 
          res.status(200).json({
