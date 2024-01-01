@@ -2,6 +2,8 @@
 import PatientModel from "../models/patientModel.js"
 
 
+
+//Admin Dashboard
 export const getTotalAmountService = async () => {
   try {
     const result = await PatientModel.aggregate([
@@ -15,7 +17,7 @@ export const getTotalAmountService = async () => {
 
     if (result.length > 0) {
       const totalAmount = result[0].amountSaved;
-      console.log('Total Amount:', totalAmount);
+      // console.log('Total Amount:', totalAmount);
       return totalAmount;
     } else {
       console.log('No records found.');
@@ -28,12 +30,13 @@ export const getTotalAmountService = async () => {
 };
 
 
+
 export const getTotalAmountGivenByMMHService = async () => {
   try {
     const result = await PatientModel.aggregate([
       {
         $match: {
-          amountGivenByMMH: { $exists: true }, // Match documents where amountGivenByMMH field exists
+          amountGivenByMMH: { $exists: true, $ne: '' }, // Match documents where amountGivenByMMH field exists and is not an empty string
         },
       },
       {
@@ -46,7 +49,7 @@ export const getTotalAmountGivenByMMHService = async () => {
 
     if (result.length > 0) {
       const totalAmountGivenByMMH = result[0].totalAmountGivenByMMH;
-      console.log('Total Amount Given by MMH:', totalAmountGivenByMMH);
+      // console.log('Total Amount Given by MMH:', totalAmountGivenByMMH);
       return totalAmountGivenByMMH;
     } else {
       console.log('No records found with amountGivenByMMH field.');
@@ -57,6 +60,7 @@ export const getTotalAmountGivenByMMHService = async () => {
     throw error;
   }
 };
+
 
 
 
@@ -83,7 +87,7 @@ export const getThisMonthTotalAmountService = async () => {
 
     if (result.length > 0) {
       const monthAmount = result[0].amountSaved;
-      console.log('Total Amount for the current month:', monthAmount);
+      // console.log('Total Amount for the current month:', monthAmount);
       return monthAmount;
     } else {
       console.log('No records found for the current month.');
@@ -126,7 +130,7 @@ export const totalNumberOfCaseCloseService = async () => {
 
     if (result.length > 0) {
       const totalClosedCases = result[0].totalClosedCases;
-      console.log('Total number of closed cases:', totalClosedCases);
+      // console.log('Total number of closed cases:', totalClosedCases);
       return totalClosedCases;
     } else {
       console.log('No closed cases found.');
@@ -173,7 +177,7 @@ export const totalNumberOfCaseCloseInMonthService = async () => {
 
     if (result.length > 0) {
       const totalClosedCases = result[0].totalClosedCases;
-      console.log('Total number of closed cases for the current month:', totalClosedCases);
+      // console.log('Total number of closed cases for the current month:', totalClosedCases);
       return totalClosedCases;
     } else {
       console.log('No closed cases found for the current month.');
@@ -217,7 +221,6 @@ export const totalNumberOfMonthApproachService = async () => {
 };
 
 
-
 export const findPendingCasesMoreThan5DaysService = async () => {
   try {
     const currentDate = new Date();
@@ -225,11 +228,13 @@ export const findPendingCasesMoreThan5DaysService = async () => {
     fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
     const pendingCases = await PatientModel.find({
-      status: { $not: { $in: ['Patient Registered'] } }, // Assuming 'Closed' and 'Rejected' are your closed status values
+      status: 'Patient Registered', // Assuming 'Patient Registered' is your pending status
       registeredDate: { $lte: fiveDaysAgo },
     });
 
-    console.log('Pending cases open for more than 5 days:', pendingCases);
+    // Log the pending cases open for more than 5 days
+    // console.log('Pending cases open for more than 5 days:', pendingCases);
+
     return pendingCases.length;
   } catch (error) {
     console.error('Error fetching pending cases:', error);
@@ -239,10 +244,12 @@ export const findPendingCasesMoreThan5DaysService = async () => {
 
 
 
+
+//Operator Dashboards
 export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
   try {
 
-    //Pending cases
+    //Pending cases by operator
     const pendingPatients = await PatientModel.find({
       createdBy: phoneNumber,
       status: 'Patient Registered'
@@ -250,7 +257,7 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
     const pendingPatientsCount = pendingPatients.length
 
 
-    //Documents
+    //Documents uploaded by operetor 
     const uploadDocuments = await PatientModel.find({
       createdBy: phoneNumber,
       status: 'Documents Uploaded'
@@ -258,13 +265,15 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
     const uploadDocumentsCount = uploadDocuments.length
 
 
+    //hospital and scheme by operetor 
     const hospitalAndScheme = await PatientModel.find({
       createdBy: phoneNumber,
       status: 'Scheme & Hospital Selected'
     })
     const hospitalAndSchemeCount = hospitalAndScheme.length
 
-    
+
+    //close patients by operator
     const closePatientDetails = await PatientModel.find({
       createdBy: phoneNumber,
       status: ['Closed-Patient Rejected',
@@ -275,9 +284,9 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
         'Closed-Other']
     })
     const closePatientDetailsCount = closePatientDetails.length
-    
 
-    const allDataResponse = [...pendingPatients, ...uploadDocuments, ...hospitalAndScheme , ...closePatientDetails]
+
+    const allDataResponse = [...pendingPatients, ...uploadDocuments, ...hospitalAndScheme, ...closePatientDetails]
     // console.log("alll data===>", allDataResponse);
 
     const response = {
@@ -294,3 +303,4 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
     throw error;
   }
 }
+
