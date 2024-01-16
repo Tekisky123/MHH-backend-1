@@ -171,7 +171,7 @@ export const deletePatient = async (req, res) => {
         })
     }
 
-    await PatientModel.deleteOne()
+   // await PatientModel.deleteOne()
     res.json({
         success: true,
         message: "Patient deleted successfully..."
