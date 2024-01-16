@@ -161,23 +161,31 @@ export const updatePatient = async (req, res) => {
 };
 
 export const deletePatient = async (req, res) => {
-    const _id = req.params.id
-    const patient = await PatientModel.findByIdAndDelete(_id)
+    const _id = req.params.id;
 
-    if (!patient) {
-        return res.status(status.NOT_FOUND).json({
+    try {
+        const patient = await PatientModel.findByIdAndDelete({ _id });
+
+        if (!patient) {
+            return res.status(status.NOT_FOUND).json({
+                success: false,
+                message: "Invalid ID"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Patient deleted successfully..."
+        });
+    } catch (error) {
+        return res.status(status.INTERNAL_SERVER_ERROR).json({
             success: false,
-            message: "Invalid ID"
-        })
+            message: "Error while deleting patient",
+            error: error.message
+        });
     }
+};
 
- //   await PatientModel.deleteOne()
-    res.json({
-        success: true,
-        message: "Patient deleted successfully..."
-    })
-
-}
 
 //get patient by Id
 
