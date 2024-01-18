@@ -286,7 +286,13 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
     const closePatientDetailsCount = closePatientDetails.length
 
 
-    const allDataResponse = [...pendingPatients, ...uploadDocuments, ...hospitalAndScheme, ...closePatientDetails]
+  
+  
+
+    console.log("res" , getThisMonthTotalAmountOperatorService);
+
+
+    const allDataResponse = [...pendingPatients, ...uploadDocuments, ...hospitalAndScheme, ...closePatientDetails ]
     // console.log("alll data===>", allDataResponse);
 
     const response = {
@@ -294,6 +300,7 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
       uploadDocumentsCount: uploadDocumentsCount,
       hospitalAndSchemeCount: hospitalAndSchemeCount,
       closePatientDetailsCount: closePatientDetailsCount,
+      getThisMonthTotalAmountOperatorService : getThisMonthTotalAmountOperatorService,
       allDataResponse: allDataResponse
     }
     return response;
@@ -304,3 +311,75 @@ export const operatorDetailsBasedOnStatusService = async (phoneNumber) => {
   }
 }
 
+
+//getThisMonthTotalAmountOperatorService
+export const getThisMonthTotalAmountOperatorService = async (phoneNumber) => {
+  try {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based in JavaScript
+
+      const result = await PatientModel.aggregate([
+          {
+              $match: {
+                  $expr: {
+                      $and: [
+                          { $eq: [{ $month: '$registeredDate' }, currentMonth] },
+                          { $eq: ['$createdBy', phoneNumber] },
+                      ],
+                  },
+              },
+          },
+          {
+              $group: {
+                  _id: null,
+                  amountSaved: { $sum: { $toInt: '$amountSaved' } },
+              },
+          },
+      ]);
+
+      if (result.length > 0) {
+          const monthAmount = result[0].amountSaved;
+          // console.log('Total Amount for the current month:', monthAmount);
+          return monthAmount;
+      } else {
+          console.log('No records found for the current month.');
+          return 0;
+      }
+  } catch (error) {
+      console.error('Error fetching total amount for the current month:', error);
+      throw error;
+  }
+};
+
+
+
+//get total amount
+export const getTotalAmountSavedOperatorService = async (phoneNumber) => {
+  try {
+      const result = await PatientModel.aggregate([
+          {
+              $match: {
+                  createdBy: phoneNumber,
+              },
+          },
+          {
+              $group: {
+                  _id: null,
+                  amountSaved: { $sum: { $toInt: '$amountSaved' } },
+              },
+          },
+      ]);
+
+      if (result.length > 0) {
+          const totalAmount = result[0].amountSaved;
+          // console.log('Total Amount till date:', totalAmount);
+          return totalAmount;
+      } else {
+          console.log('No records found.');
+          return 0;
+      }
+  } catch (error) {
+      console.error('Error fetching total amount till date:', error);
+      throw error;
+  }
+};
