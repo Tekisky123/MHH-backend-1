@@ -79,13 +79,13 @@ export const dashboardOperatorDetailsController = async (req, res) => {
          const details = await operatorDetailsBasedOnStatusService(phoneNumber)
 
          const monthsAmountSavedDetails = await getThisMonthTotalAmountOperatorService(phoneNumber)
-         const totalAmountSavedOperatorService = await getTotalAmountSavedOperatorService(phoneNumber)
+         const totalAmountSavedDetails = await getTotalAmountSavedOperatorService(phoneNumber)
 
          res.status(200).json({
             success: true,
             details,
             monthsAmountSavedDetails,
-            totalAmountSavedOperatorService
+            totalAmountSavedDetails
          })
 
         } catch (error) {
