@@ -7,7 +7,9 @@ totalNumberOfCaseCloseInMonthService,
 totalNumberOfApproachService, totalNumberOfMonthApproachService,
 findPendingCasesMoreThan5DaysService,
 operatorDetailsBasedOnStatusService,
-getTotalAmountGivenByMMHService
+getTotalAmountGivenByMMHService,
+getThisMonthTotalAmountOperatorService,
+getTotalAmountSavedOperatorService
 } from '../services/dashboardService.js'
 
 export const dashboardController = async (req, res) => {
@@ -76,9 +78,14 @@ export const dashboardOperatorDetailsController = async (req, res) => {
         //  console.log( "number ==> cont " ,phoneNumber);
          const details = await operatorDetailsBasedOnStatusService(phoneNumber)
 
+         const monthsAmountSavedDetails = await getThisMonthTotalAmountOperatorService(phoneNumber)
+         const totalAmountSavedOperatorService = await getTotalAmountSavedOperatorService(phoneNumber)
+
          res.status(200).json({
             success: true,
-            details
+            details,
+            monthsAmountSavedDetails,
+            totalAmountSavedOperatorService
          })
 
         } catch (error) {
