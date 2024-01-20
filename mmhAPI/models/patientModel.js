@@ -8,7 +8,7 @@ const patientDetailsSchema = new mongoose.Schema({
   sex: { type: String,  trim: true ,required: true },
   age: { type: Number,  trim: true ,required: true },
   address: { type: String,  trim: true ,required: true },
-  pin: { type: String, trim: true , required: true },
+  pin: { type: String, trim: true },
   talukha: { type: String,  trim: true  },
   district: { type: String, trim: true , required: true },
   state: { type: String,  trim: true  },
