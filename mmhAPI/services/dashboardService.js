@@ -2,11 +2,19 @@
 import PatientModel from "../models/patientModel.js"
 
 
-
 //Admin Dashboard
 export const getTotalAmountService = async () => {
   try {
     const result = await PatientModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { amountSaved: { $ne: null } }, // Filter out null values
+            { amountSaved: { $ne: '' } },   // Filter out empty strings
+            { amountSaved: { $type: 'number' } } // Filter out non-numeric values
+          ]
+        }
+      },
       {
         $group: {
           _id: null,
@@ -37,6 +45,7 @@ export const getTotalAmountGivenByMMHService = async () => {
       {
         $match: {
           amountGivenByMMH: { $exists: true, $ne: '' }, // Match documents where amountGivenByMMH field exists and is not an empty string
+          amountGivenByMMH: { $type: 'number' } // Match documents where amountGivenByMMH is a number
         },
       },
       {
@@ -46,6 +55,7 @@ export const getTotalAmountGivenByMMHService = async () => {
         },
       },
     ]);
+
 
     if (result.length > 0) {
       const totalAmountGivenByMMH = result[0].totalAmountGivenByMMH;
@@ -72,9 +82,12 @@ export const getThisMonthTotalAmountService = async () => {
     const result = await PatientModel.aggregate([
       {
         $match: {
-          $expr: {
-            $eq: [{ $month: '$registeredDate' }, currentMonth],
-          },
+          $and: [
+            { amountSaved: { $ne: null } }, // Filter out null values
+            { amountSaved: { $ne: '' } },   // Filter out empty strings
+            { amountSaved: { $type: 'number' } }, // Filter out non-numeric values
+            { $expr: { $eq: [{ $month: '$registeredDate' }, currentMonth] } }
+          ]
         },
       },
       {
