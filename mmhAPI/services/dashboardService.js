@@ -1,41 +1,37 @@
 
 import PatientModel from "../models/patientModel.js"
 
-
 //Admin Dashboard
 export const getTotalAmountService = async () => {
   try {
     const result = await PatientModel.aggregate([
       {
         $match: {
-          $and: [
-            { amountSaved: { $ne: null } }, // Filter out null values
-            { amountSaved: { $ne: '' } },   // Filter out empty strings
-            { amountSaved: { $type: 'number' } } // Filter out non-numeric values
-          ]
+          amountSaved: { $ne: null, $ne: "" } // Filter out null values and empty strings
         }
       },
       {
         $group: {
           _id: null,
-          amountSaved: { $sum: { $toInt: '$amountSaved' } }, // Convert to integer if 'amountSaved' is a string
-        },
-      },
+          amountSaved: { $sum: { $toInt: "$amountSaved" } } // Convert to integer if 'amountSaved' is a string
+        }
+      }
     ]);
 
     if (result.length > 0) {
       const totalAmount = result[0].amountSaved;
-      // console.log('Total Amount:', totalAmount);
+      console.log("Total Amount:", totalAmount);
       return totalAmount;
     } else {
-      console.log('No records found.');
+      console.log("No records found.");
       return 0;
     }
   } catch (error) {
-    console.error('Error fetching total amount:', error);
+    console.error("Error fetching total amount:", error);
     throw error;
   }
 };
+
 
 
 
@@ -44,29 +40,27 @@ export const getTotalAmountGivenByMMHService = async () => {
     const result = await PatientModel.aggregate([
       {
         $match: {
-          amountGivenByMMH: { $exists: true, $ne: '' }, // Match documents where amountGivenByMMH field exists and is not an empty string
-          amountGivenByMMH: { $type: 'number' } // Match documents where amountGivenByMMH is a number
-        },
+          amountGivenByMMH: { $exists: true, $ne: "" } // Match documents where amountGivenByMMH field exists and is not an empty string
+        }
       },
       {
         $group: {
           _id: null,
-          totalAmountGivenByMMH: { $sum: { $toDouble: "$amountGivenByMMH" } },
-        },
-      },
+          totalAmountGivenByMMH: { $sum: { $toDouble: "$amountGivenByMMH" } }
+        }
+      }
     ]);
-
 
     if (result.length > 0) {
       const totalAmountGivenByMMH = result[0].totalAmountGivenByMMH;
-      // console.log('Total Amount Given by MMH:', totalAmountGivenByMMH);
+      console.log("Total Amount Given by MMH:", totalAmountGivenByMMH);
       return totalAmountGivenByMMH;
     } else {
-      console.log('No records found with amountGivenByMMH field.');
+      console.log("No records found with amountGivenByMMH field.");
       return 0;
     }
   } catch (error) {
-    console.error('Error fetching total amount given by MMH:', error);
+    console.error("Error fetching total amount given by MMH:", error);
     throw error;
   }
 };
